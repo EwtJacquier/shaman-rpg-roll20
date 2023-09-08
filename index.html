@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Macro Generator - Shaman King RPG</title>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <style>
+        *{box-sizing: border-box;}
+        html,body{font-size: 18px; width: 100%; max-width: 1200px; font-family: arial; margin: 10px auto;}
+        input, textarea{padding: 10px 15px; display: block; margin-top: 5px; width: 100%; font-weight: bold;}
+        input{font-size: 16px;}
+        label{display: block; width: 100%; font-size: 16px;}
+        label:not(:last-child){
+            margin-bottom: 10px;
+        }
+        textarea{resize: none; height: 150px;}
+        small{
+            margin-top: 10px;
+            display: block;
+        }
+        h1{text-align: center; font-size: 20px;}
+        .d-flex{display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; align-items: start;}
+        .d-flex label:not(:only-child){width: calc(100% - 90px);}
+        .d-nowrap{flex-wrap: nowrap;}
+        .skill-box{padding: 10px;margin-bottom: 10px;border: solid 1px #ccc;}
+        .skill-cost{background: #000; color: #fff; padding: 5px; display: block; width: 70px; text-align: center;}
+        .skill-options{display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;}
+        .skill-options:last-child{margin-bottom: 0;}
+        .skill-options label{margin-bottom: 0; width: 100% !important;}
+        .skill-options button{padding: 0; border: none; background: transparent; cursor: pointer; position: relative; font-size: 18px;}
+        .skill-options button span{position: absolute; background: rgba(255,255,255,0.8); font-weight: bold; padding: 2px; top: -2px; z-index: 1; right: -2px; color: red;}
+        .skill-container{display: flex; gap: 20px;}
+        .skill-col:first-child{width: 40%;}
+        .skill-col:last-child{width: 60%;}
+        .skill-imgs{display: flex; gap: 10px; flex-wrap: wrap; margin-top: -20px;}
+        .skill-imgs label{margin-bottom: 0; width: 100% !important;}
+        .skill-imgs-action{position: relative;}
+        .skill-imgs-action:hover button{display: block;}
+        .skill-imgs-action button{position: absolute; opacity: 0; top: 0; left: 0; width: 100%; height: 100%; z-index: 2; cursor: pointer;}
+        .skill-imgs-action span{position: absolute; background: rgba(255,255,255,0.8); font-weight: bold; padding: 2px; top: -2px; z-index: 1; right: -2px; color: red;}
+    </style>
+</head>
+<body>
+    <h1>Gerador de Macro v2.0 - Shaman King RPG</h1>
+    <div class="skill">
+        <div class="skill-container">
+            <div class="skill-col">
+                <div class="d-flex skill-box">
+                    <label>
+                        Nome do Personagem
+                        <input type="text" class="skill-char">
+                        <small>Observação: Deve ser exatamente igual ao nome do token</small>
+                    </label>
+                </div>
+                <div class="d-flex skill-box">
+                    <label>
+                        Nome da Habilidade
+                        <input type="text" class="skill-name">
+                    </label>
+                    <div class="skill-info">
+                        <label>Custo</label>
+                        <span class="skill-cost">0 PO</span>
+                    </div>
+                    <div class="skill-imgs">
+                        <label>Ações</label>
+                    </div>
+                </div>
+                <div class="d-flex skill-box">
+                    <label>
+                        GIF da Habilidade
+                        <input type="text" class="skill-image">
+                        <small>Observação: Deve ser um link de imagem</small>
+                    </label>
+                </div>
+
+                <div class="skill-box">
+                    <label>
+                        Macro Roll20
+                        <textarea class="skill-macro"></textarea>
+                    </label>
+                </div>
+            </div>
+            <div class="skill-col">
+                <div class="skill-box d-flex d-nowrap">
+                    <div class="skill-options medium">
+                        <label>Caminho do Médium</label>
+                    </div>
+                </div>
+                <div class="skill-box d-flex d-nowrap">
+                    <div class="skill-options ancestral">
+                        <label>Caminho dos Primitivos</label>
+                    </div>
+                </div>
+                <!--
+                <div class="skill-box d-flex d-nowrap">
+                    <div class="skill-options elemento">
+                        <label>Caminho dos Elementos</label>
+                    </div>
+                </div>
+                <div class="skill-box d-flex d-nowrap">
+                    <div class="skill-options materia">
+                        <label>Caminho da Matéria</label>
+                    </div>
+                </div>
+                <div class="skill-box d-flex d-nowrap">
+                    <div class="skill-options sacerdote">
+                        <label>Caminho do Sacerdote</label>
+                    </div>
+                </div>
+                <div class="skill-box">
+                    <div class="skill-options xama_1">
+                        <label>Xamã Nv.1</label>
+                    </div>
+                    <div class="skill-options xama_2">
+                        <label>Xamã Nv.2</label>
+                    </div>
+                    <div class="skill-options xama_3">
+                        <label>Xamã Nv.3</label>
+                    </div>
+                </div>
+                <div class="skill-box">
+                    <div class="skill-options sacerdote_1">
+                        <label>Sacerdote Nv.1</label>
+                    </div>
+                    <div class="skill-options sacerdote_2">
+                        <label>Sacerdote Nv.2</label>
+                    </div>
+                    <div class="skill-options sacerdote_3">
+                        <label>Sacerdote Nv.3</label>
+                    </div>
+                </div>
+                -->
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        let skill_replacer = '';
+        let arma_espiritual = false;
+        
+        let osp_multiplier = 1;
+        
+        const osp = '(@{char|osp_ataque} + @{char|osp_defesa} + @{char|osp_elemental})';
+        const attack_osp = '@{char|osp_ataque}';
+        const elem_osp = '@{char|osp_elemental}';
+
+        const modified_actions = {
+            especial_ataque: [']]','+2]]'],
+            especial_movimentar: [']]','+2]]'],
+            especial_curativo: [']]','+2]]'],
+            especial_curar: [']]','+2]]'],
+            especial_impulso: ['o}]]','o}+2]]'],
+            especial_impacto: [']]=','+2]]='],
+            especial_puxar: [']]=','+2]]='],
+            especial_restauracao: [']]=','+2]]='],
+            explodir_ataque: [']]','+1]]'],
+            explodir_impacto: [']]=','+1]]='],
+            explodir_puxar: [']]=','+1]]='],
+            voar_movimentar: [']]','+2]]'],
+            voar_impulso: [']],','+2]],'],
+            invocar_ataque: ['@{char|ataque}+@{char|bonus_ataque}','3'],
+            invocar_empurrar: ['+@{char|bonus_empurrar}',''],
+            invocar_movimentar: ['+@{char|bonus_movimento}',''],
+            invocar_curativo: ['+@{char|bonus_cura}',''],
+            invocar_curar: ['+@{char|bonus_cura}',''],
+            invocar_impacto: ['+@{char|bonus_empurrar}','','@{char|ataque}+@{char|bonus_ataque}','3'],
+            invocar_impulso: ['+@{char|bonus_movimento}','','+@{char|bonus_empurrar}',''],
+            invocar_puxar: ['+@{char|bonus_puxar}','','@{char|ataque}+@{char|bonus_ataque}','3'],
+            superior_ataque: ['@{char|ataque}+@{char|bonus_ataque}','5'],
+            superior_empurrar: ['+@{char|bonus_empurrar}',''],
+            superior_movimentar: ['+@{char|bonus_movimento}',''],
+            superior_curativo: ['+@{char|bonus_cura}','+2'],
+            superior_curar: ['+@{char|bonus_cura}','+2'],
+            superior_meditar: ['3','(3+2)'],
+            superior_impacto: ['+@{char|bonus_empurrar}','','@{char|ataque}+@{char|bonus_ataque}','4'],
+            superior_impulso: ['+@{char|bonus_movimento}','','+@{char|bonus_empurrar}',''],
+            superior_puxar: ['+@{char|bonus_puxar}','','@{char|ataque}+@{char|bonus_ataque}','4'],
+        };
+
+        const elements = {
+        };
+
+        const classes = {
+            medium: ['movimentar', 'ataque', 'defesa', 'curar', 'dadoataque', 'dadodefesa', 'dadocurar', 'empurrar', 'puxar', 'acrobacia', 'reagir','quebrar'],
+            ancestral: ['fisgar','presa','aguia','touro'],
+            /*
+            elemento: ['fogo','raio','vento'],
+            xama_3: ['puxar','voar','arma','transferir','defletir','grandeespirito'],
+            sacerdote: ['meditar'],
+            sacerdote_2: ['cosmico','barreira','invocar','expandir'],
+            sacerdote_3: ['puxar','voar','restauracao','superior','reintegrar','converter']
+            */
+        };
+
+        const actions = {
+            movimentar: [1, "{{Movimentar [[@{char|mv} + @{char|eq_mv} + @{char|os_mv}]] casas}}"],
+            ataque: [1, "{{Causa [[2 + @{char|at} + @{char|eq_at} + @{char|os_at}]] de dano}}"],
+            dadoataque: [1, "{{Causa [[@{char|da}]] de dano}}"],
+            defesa: [1, "{{Anula [[2 + @{selected|df} + @{selected|eq_df} + @{selected|os_df}]] de dano.}}"],
+            dadodefesa: [1, "{{Anula [[2 + @{selected|df} + @{selected|eq_df} + @{selected|os_df}]] de dano.}}"],
+            curar: [1, "{{Cura [[2 + (@{char|vd} + @{char|eq_vd} + @{char|os_vd})]] pontos de vida}}"],
+            dadocurar: [1, "{{Cura [[@{char|da}]] pontos de vida}}"],
+            empurrar: [1, "{{Empurra o alvo em [[4]] casas}}"],
+            puxar: [1, "{{Puxa o alvo em [[4]] casas}}"],
+            reagir: [2, "{{Executando uma reação}}"],
+            quebrar: [3, "{{Diminui a duração OverSoul do alvo em [[1]]}}"],
+            acrobacia: [2, "{{Não permite que usem reações}}"],
+            fisgar: [1, "{{Causa [[@{char|at} + @{char|eq_at} + @{char|os_at}]] de dano e puxa o alvo em [[2]] casas}}"],
+            presa: [2, "{{O alvo recebe um debuff de [[4]] MV por 1 turno.}}"],
+            aguia: [2, "{{Aumenta o alcance em [[(@{selected|al} + @{selected|eq_al} + @{selected|os_al}) * 3]]}}"],
+            touro: [2, "{{Causa [[(2 + @{char|at} + @{char|eq_at} + @{char|os_at}) * 2]] de dano e empurra o alvo em [[6]] casas}}"],
+            meditar: [2, "{{Meditar [[2]]=[img](http://67.205.142.249/shaman/meditar.png)}}"],
+            meditar2x: [2, "{{Meditar [[{3*2,7}kl1]]=[img](http://67.205.142.249/shaman/meditar.png)}}"],
+            cosmico: [1, "{{Cósmico=[img](http://67.205.142.249/shaman/cosmico.png)}}"],
+            desvincular: [1, "{{Desvincular=[img](http://67.205.142.249/shaman/desvincular.png)}}"],
+            area: [2, "{{Em Área [[3]]x =[img](http://67.205.142.249/shaman/area.png)}}"],
+            direcionar: [2, "{{Direcionar [[4]]=[img](http://67.205.142.249/shaman/direcionar.png)}}"],
+            especial: [2, "{{Especial +[[2]]=[img](http://67.205.142.249/shaman/especial.png)}}"],
+            barreira: [2, "{{Barreira [[4]]=[img](http://67.205.142.249/shaman/barreira.png)}}"],
+            incorporar: [3, "{{Incorporar [[60]]%=[img](http://67.205.142.249/shaman/incorporar.png)}}"],
+            invocar: [3, "{{Invocar=[img](http://67.205.142.249/shaman/invocar.png)}}"],
+            explodir: [2, "{{Explodir +[[1]]=[img](http://67.205.142.249/shaman/explodir.png)}}"],
+            expandir: [1, "{{Expandir +[[1]]=[img](http://67.205.142.249/shaman/expandir.png)}}"],
+            impulso: [1, "{{Impulso [[2+@{char|bonus_movimento}]], [[1+@{char|bonus_empurrar}]]=[img](http://67.205.142.249/shaman/impulso.png)}}"],
+            impulso2x: [1, "{{Impulso [[{(2+@{char|bonus_movimento})*2,7}kl1]], [[{(1+@{char|bonus_empurrar})*2,7}kl1]]=[img](http://67.205.142.249/shaman/impulso.png)}}"],
+            
+            impacto2x: [1, "{{Impacto [[{(1+@{char|bonus_empurrar})*2,7}kl1]], [[{(@{char|ataque}+@{char|bonus_ataque}-2)*2,7}kl1]]=[img](http://67.205.142.249/shaman/impacto.png)}}"],
+            puxar2x: [1, "{{Puxar [[{(2+@{char|bonus_puxar})*2,7}kl1]], [[{(@{char|ataque}+@{char|bonus_ataque}-3)*2,7}kl1]]=[img](http://67.205.142.249/shaman/puxar.png)}}"],
+            transferir: [2, "{{Transferir [[floor( @{char|vigor} / 2 )]]=[img](http://67.205.142.249/shaman/transferir.png)}}"],
+            grandeespirito: [2, "{{Grande Espírito=[img](http://67.205.142.249/shaman/grandeespirito.png)}}"],
+            defletir: [3, "{{Defletir [[@{char|poder_xamanico}-4]]=[img](http://67.205.142.249/shaman/defletir.png)}}"],
+            restauracao: [2, "{{Restauração [[@{char|poder_xamanico}+@{char|bonus_cura} -5]]=[img](http://67.205.142.249/shaman/restauracao.png)}}"],
+            restauracao2x: [2, "{{Restauração [[{( @{char|poder_xamanico}+@{char|bonus_cura} -5 )*2,7}kl1]]=[img](http://67.205.142.249/shaman/restauracao.png)}}"],
+            punicao: [2, "{{Punição [["+osp+"]]=[img](http://67.205.142.249/shaman/punicao.png)}}"],
+            exorcizar: [3, "{{Exorcizar [[floor( @{char|poder_xamanico} / 2)]]=[img](http://67.205.142.249/shaman/exorcizar.png)}}"],
+            aprisionar: [3, "{{Aprisionar=[img](http://67.205.142.249/shaman/aprisionar.png)}}"],
+            voar: [1, "{{Flutuar +[[2]]=[img](http://67.205.142.249/shaman/voar.png)}}"],
+            arma: [1, "{{Arma Esp.=[img](http://67.205.142.249/shaman/arma.png)}}"],
+            superior: [3, "{{Superior=[img](http://67.205.142.249/shaman/superior.png)}}"],
+            reintegrar: [2, "{{Reintegrar [[floor( (@{char|poder_xamanico} / 4)]]=[img](http://67.205.142.249/shaman/reintegrar.png)}}"],
+            converter: [2, "{{Converter [["+osp+" + 2]]=[img](http://67.205.142.249/shaman/converter.png)}}"],
+            fogo: [2,"{{Fogo [[(4 + @{char|at} + @{char|eq_at} + @{char|os_at}) * 2]]}}"],
+            gelo: [1,"Gelo"],
+            gelo2x: [1,"Gelo"],
+            agua: [1,"Água"],
+            agua2x: [1,"Água"],
+            madeira: [1,"Madeira"],
+            madeira2x: [1,"Madeira"],
+            metal: [1,"Metal"],
+            metal2x: [1,"Metal"],
+            terra: [1,"Terra"],
+            terra2x: [1,"Terra"],
+            vento: [1,"{{Empurrar / Puxar [[6]]}}"],
+            raio: [1,"{{Trovão [[4 + @{char|mv} + @{char|eq_mv} + @{char|os_mv}]]}}"],
+        };
+
+        function genAction(char, action, sync = false){
+            let element_key = '';
+            let replace = '';
+
+            let macro = typeof(actions[action]) !== 'undefined' ? actions[action][1].replace('{{','{{[img]('+window.location.href+'img/'+action+'.png)=') : '';
+            let cost = typeof(actions[action]) !== 'undefined' ? actions[action][0] : '';
+
+            macro = macro.replaceAll('char|','selected|');
+
+            return [macro, cost];
+        }
+
+        function genMacro(char, skill_name = '?', all_actions = [] ){
+            let macro = ['&{template:default} {{name='+char+' - '+skill_name+'}} {{Alcance [[@{selected|al} + @{selected|eq_al} + @{selected|os_al}]]}}'];
+            let cost = 0;
+
+            osp_multiplier = 1;
+
+            if (all_actions.length > 0){
+
+                let arma_espiritual = false;
+                let ataque = false;
+                let invocacao = false;
+
+                for (let index = 0; index < all_actions.length; index++){
+                    const action = all_actions[index];
+
+                    if (action === 'sincronia'){
+                        if (typeof(all_actions[index - 1]) !== 'undefined' && typeof(actions[all_actions[index - 1] + '2x']) !== 'undefined'){
+                            all_actions[index - 1] = all_actions[index - 1]+'2x';
+                        }
+
+                        if (typeof(all_actions[index + 1]) !== 'undefined' && typeof(actions[all_actions[index + 1] + '2x']) !== 'undefined'){
+                            all_actions[index + 1] = all_actions[index + 1]+'2x';
+                        }
+                    }
+
+                    if (action === 'arma'){
+                        arma_espiritual = true;
+                    }
+
+                    if (action == 'superior' || action == 'invocar' || action == 'grandeespirito'){
+                        invocacao = true;
+                    }
+                }
+
+                skill_replacer = '';
+
+                all_actions.forEach(function(action){
+
+                    const sync = action.indexOf('2x') > -1;
+
+                    action = action.replace('2x','');
+
+                    let generated = genAction(char, action, sync);
+
+                    if (generated[0]){
+
+                        if (generated[0].indexOf('ataque') > -1){
+                            ataque = true;
+                        }
+
+                        macro.push(generated[0]);
+                        cost += generated[1];
+                    }
+                });
+
+                if (arma_espiritual){
+                    switch (cost){
+                        case 5: osp_multiplier = 2; break;
+                        case 6: osp_multiplier = 3; break;
+                        case 7: osp_multiplier = 4; break;
+                        default: osp_multiplier = 0;
+                    }
+                }
+
+                if (arma_espiritual){
+                    macro.push(('{{Bônus [[('+osp.replace('char',char).replace('char',char).replace('char',char)+'*'+osp_multiplier+')]]=OSP}}'));
+                    macro.push('{{Bônus +[[1]]=Alcance}}');
+                }
+            }
+
+            macro = macro.join(' ');
+
+            if (jQuery('.skill-image').val().trim().length > 0){
+                macro += "\n[img]("+jQuery('.skill-image').val().trim()+")";
+            }
+
+            return [macro, cost];
+        }
+
+        function renderSkill(){
+            let skill_actions = [];
+
+            jQuery('.skill-imgs-action').each(function(){
+                skill_actions.push(jQuery(this).attr('data-action'));
+            });
+
+            const macro = genMacro(jQuery('.skill-char').val(), jQuery('.skill-name').val(), skill_actions);
+
+            jQuery('.skill-macro').val(macro[0]);
+
+            let custo_real = '?';
+
+            switch (macro[1]){
+                case 1: custo_real = 2; break;
+                case 2: custo_real = 4; break;
+                case 3: custo_real = 6; break;
+                case 4: custo_real = 8; break;
+                case 5: custo_real = 10; break;
+                case 6: custo_real = 12; break;
+                default: custo_real = '?';
+            }
+
+            jQuery('.skill-cost').text(custo_real + ' PO');
+        }
+
+        Object.keys(classes).forEach(function(key){
+            classes[key].forEach(function(skill){
+                jQuery('<button data-action="'+skill+'" data-cost="'+actions[skill][0]+'"><img src="./img/'+skill+'.png"></button>').appendTo('.skill-options.'+key);
+            })
+        });
+
+        jQuery('.skill-options button').click(function(){
+            jQuery('.skill-imgs').append(jQuery('<div class="skill-imgs-action" data-action="'+jQuery(this).attr('data-action')+'">'+jQuery(this).html()+'<button class="skill-remove">DEL</button></div>'));
+
+            renderSkill();
+        });
+
+        jQuery(document).on('click', '.skill-remove', function(){
+            jQuery(this).parent().remove();
+
+            renderSkill();
+        });
+
+        jQuery('input').on('keyup', function(){
+            renderSkill();
+        });
+    </script>
+</body>
+</html>
