@@ -268,7 +268,7 @@
         }
 
         function genMacro(char, skill_name = '?', all_actions = [] ){
-            let macro = ['&{template:default} {{name='+char+' - '+skill_name+'}} {{Alcance [[@{selected|al} + @{selected|eq_al} + @{selected|os_al}]]}}'];
+            let macro = ['&{template:default} {{name='+char+' - '+skill_name+'}} {{[img]('+window.location.href+'img/alcance.png=Seu alcance é de [[@{selected|al} + @{selected|eq_al} + @{selected|os_al}]] casa(s)}}'];
             let cost = 0;
 
             osp_multiplier = 1;
