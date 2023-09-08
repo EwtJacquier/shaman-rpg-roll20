@@ -194,7 +194,7 @@
         };
 
         const actions = {
-            movimentar: [1, "{{Movimentar [[@{char|mv} + @{char|eq_mv} + @{char|os_mv}]] casas}}"],
+            movimentar: [1, "{{Movimentar [[3 + @{char|mv} + @{char|eq_mv} + @{char|os_mv}]] casas}}"],
             ataque: [1, "{{Causa [[2 + @{char|at} + @{char|eq_at} + @{char|os_at}]] de dano}}"],
             dadoataque: [1, "{{Causa [[@{char|da}]] de dano}}"],
             defesa: [1, "{{Anula [[2 + @{selected|df} + @{selected|eq_df} + @{selected|os_df}]] de dano.}}"],
@@ -268,7 +268,7 @@
         }
 
         function genMacro(char, skill_name = '?', all_actions = [] ){
-            let macro = ['&{template:default} {{name='+char+' - '+skill_name+'}} {{[img]('+window.location.href+'img/alcance.png)=Seu alcance é de [[@{selected|al} + @{selected|eq_al} + @{selected|os_al}]] casa(s)}}'];
+            let macro = ['&{template:default} {{name='+char+' - '+skill_name+'}} {{[img]('+window.location.href+'img/alcance.png)=Seu alcance é de [[1 + @{selected|al} + @{selected|eq_al} + @{selected|os_al}]] casa(s)}}'];
             let cost = 0;
 
             osp_multiplier = 1;
