@@ -259,7 +259,7 @@
             let element_key = '';
             let replace = '';
 
-            let macro = typeof(actions[action]) !== 'undefined' ? actions[action][1].replace('{{','{{[img]('+window.location.href+'img/'+action+'.png)=') : '';
+            let macro = typeof(actions[action]) !== 'undefined' ? actions[action][1].replace('{{','{{[img]('+window.location.href+'img/'+action+'.png) ') : '';
             let cost = typeof(actions[action]) !== 'undefined' ? actions[action][0] : '';
 
             macro = macro.replaceAll('char|','selected|');
@@ -268,7 +268,7 @@
         }
 
         function genMacro(char, skill_name = '?', all_actions = [] ){
-            let macro = ['&{template:default} {{name='+char+' - '+skill_name+'}} {{[img]('+window.location.href+'img/alcance.png)=Seu alcance é de [[1 + @{selected|al} + @{selected|eq_al} + @{selected|os_al}]] casa(s)}}'];
+            let macro = ['&{template:default} {{name='+char+' - '+skill_name+'}} {{[img]('+window.location.href+'img/alcance.png) Seu alcance é de [[1 + @{selected|al} + @{selected|eq_al} + @{selected|os_al}]] casa(s)}}'];
             let cost = 0;
 
             osp_multiplier = 1;
