@@ -182,7 +182,7 @@
         };
 
         const classes = {
-            medium: ['movimentar', 'ataque', 'defesa', 'curar', 'dadoataque', 'dadodefesa', 'dadocurar', 'empurrar', 'puxar', 'acrobacia', 'reagir','quebrar'],
+            medium: ['movimentar', 'ataque', 'defesa', 'curar', 'dadoataque', 'dadodefesa', 'dadocurar', 'recuperar', 'empurrar', 'puxar', 'acrobacia', 'reagir','quebrar'],
             ancestral: ['fisgar','presa','aguia','touro'],
             /*
             elemento: ['fogo','raio','vento'],
@@ -197,17 +197,18 @@
             movimentar: [1, "{{Movimentar [[3 + @{char|mv} + @{char|eq_mv} + @{char|os_mv}]] casas}}"],
             ataque: [1, "{{Causa [[2 + @{char|at} + @{char|eq_at} + @{char|os_at}]] de dano}}"],
             dadoataque: [1, "{{Causa [[@{char|da}]] de dano}}"],
-            defesa: [1, "{{Anula [[2 + @{selected|df} + @{selected|eq_df} + @{selected|os_df}]] de dano.}}"],
-            dadodefesa: [1, "{{Anula [[2 + @{selected|df} + @{selected|eq_df} + @{selected|os_df}]] de dano.}}"],
+            defesa: [1, "{{Concede [[1 + @{selected|df} + @{selected|eq_df} + @{selected|os_df}]] de armadura.}}"],
+            dadodefesa: [1, "{{Concede [[@{selected|da}]] de armadura.}}"],
             curar: [1, "{{Cura [[2 + (@{char|vd} + @{char|eq_vd} + @{char|os_vd})]] pontos de vida}}"],
             dadocurar: [1, "{{Cura [[@{char|da}]] pontos de vida}}"],
-            empurrar: [1, "{{Empurra o alvo em [[4]] casas}}"],
-            puxar: [1, "{{Puxa o alvo em [[4]] casas}}"],
+            recuperar: [1, "{{Recupera [[1]] ponto de debuff}}"],
+            empurrar: [1, "{{Empurra em [[4]] casas}}"],
+            puxar: [1, "{{Puxa em [[4]] casas}}"],
             reagir: [2, "{{Executando uma reação}}"],
-            quebrar: [3, "{{Diminui a duração OverSoul do alvo em [[1]]}}"],
+            quebrar: [2, "{{Diminui a duração OverSoul do alvo em [[1]]}}"],
             acrobacia: [2, "{{Não permite que usem reações}}"],
-            fisgar: [1, "{{Causa [[@{char|at} + @{char|eq_at} + @{char|os_at}]] de dano e puxa o alvo em [[2]] casas}}"],
-            presa: [2, "{{O alvo recebe um debuff de [[4]] MV por 1 turno.}}"],
+            fisgar: [1, "{{Causa [[@{char|at} + @{char|eq_at} + @{char|os_at}]] de dano, puxa em [[2]] casas}}"],
+            presa: [2, "{{Debuff [[4]] MV por 1 turno.}}"],
             aguia: [2, "{{Aumenta o alcance em [[(1 + @{selected|al} + @{selected|eq_al} + @{selected|os_al}) * 3]]}}"],
             touro: [2, "{{Causa [[(2 + @{char|at} + @{char|eq_at} + @{char|os_at}) * 2]] de dano e empurra o alvo em [[6]] casas}}"],
             meditar: [2, "{{Meditar [[2]]=[img](http://67.205.142.249/shaman/meditar.png)}}"],
@@ -271,70 +272,18 @@
             let macro = ['&{template:default} {{name='+char+' - '+skill_name+'}} {{[img]('+window.location.href+'img/alcance.png) Seu alcance é de [[1 + @{selected|al} + @{selected|eq_al} + @{selected|os_al}]] casa(s)}}'];
             let cost = 0;
 
-            osp_multiplier = 1;
-
             if (all_actions.length > 0){
 
-                let arma_espiritual = false;
-                let ataque = false;
-                let invocacao = false;
-
-                for (let index = 0; index < all_actions.length; index++){
-                    const action = all_actions[index];
-
-                    if (action === 'sincronia'){
-                        if (typeof(all_actions[index - 1]) !== 'undefined' && typeof(actions[all_actions[index - 1] + '2x']) !== 'undefined'){
-                            all_actions[index - 1] = all_actions[index - 1]+'2x';
-                        }
-
-                        if (typeof(all_actions[index + 1]) !== 'undefined' && typeof(actions[all_actions[index + 1] + '2x']) !== 'undefined'){
-                            all_actions[index + 1] = all_actions[index + 1]+'2x';
-                        }
-                    }
-
-                    if (action === 'arma'){
-                        arma_espiritual = true;
-                    }
-
-                    if (action == 'superior' || action == 'invocar' || action == 'grandeespirito'){
-                        invocacao = true;
-                    }
-                }
-
-                skill_replacer = '';
-
                 all_actions.forEach(function(action){
-
-                    const sync = action.indexOf('2x') > -1;
-
-                    action = action.replace('2x','');
+                    const sync = false;
 
                     let generated = genAction(char, action, sync);
 
                     if (generated[0]){
-
-                        if (generated[0].indexOf('ataque') > -1){
-                            ataque = true;
-                        }
-
                         macro.push(generated[0]);
                         cost += generated[1];
                     }
                 });
-
-                if (arma_espiritual){
-                    switch (cost){
-                        case 5: osp_multiplier = 2; break;
-                        case 6: osp_multiplier = 3; break;
-                        case 7: osp_multiplier = 4; break;
-                        default: osp_multiplier = 0;
-                    }
-                }
-
-                if (arma_espiritual){
-                    macro.push(('{{Bônus [[('+osp.replace('char',char).replace('char',char).replace('char',char)+'*'+osp_multiplier+')]]=OSP}}'));
-                    macro.push('{{Bônus +[[1]]=Alcance}}');
-                }
             }
 
             macro = macro.join(' ');
@@ -360,12 +309,10 @@
             let custo_real = '?';
 
             switch (macro[1]){
-                case 1: custo_real = 2; break;
-                case 2: custo_real = 4; break;
-                case 3: custo_real = 6; break;
-                case 4: custo_real = 8; break;
-                case 5: custo_real = 10; break;
-                case 6: custo_real = 12; break;
+                case 2: custo_real = 2; break;
+                case 4: custo_real = 4; break;
+                case 5: custo_real = 6; break;
+                case 6: custo_real = 10; break;
                 default: custo_real = '?';
             }
 
