@@ -237,7 +237,7 @@
         }
 
         function genMacro(char, skill_name = '?', all_actions = [] ){
-            let macro = ['&{template:shamanking} {{name='+char+' - '+skill_name+'}}'];
+            let macro = ['&{template:shamanking} {{name='+char+' - '+skill_name+'}} {{[img]('+window.location.href+'img/alcance.png)=Seu alcance é de [[@{selected|tal}]] casa(s)}}'];
             let cost = 0;
 
             if (all_actions.length > 0){
@@ -261,7 +261,7 @@
             macro = macro.join(' ');
 
             if (jQuery('.skill-image').val().trim().length > 0){
-                macro += "\n[img]("+jQuery('.skill-image').val().trim()+")";
+                macro += "{{imagem=[img]("+jQuery('.skill-image').val().trim()+")}}";
             }
 
             return [macro, cost];
