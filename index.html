@@ -229,7 +229,7 @@
 
         function genAction(index, char, action, sync = false){
             let macro = typeof(actions[action]) !== 'undefined' ? '{{**'+index+'**[img]('+window.location.href+'img/'+action+'.png)=@{selected|hab_'+action+'}}}' : '';
-            let cost = typeof(actions[action]) !== 'undefined' ? actions[action][0] : '';
+            let cost = typeof(actions[action]) !== 'undefined' ? actions[action] : '';
 
             macro = macro.replaceAll('char|','selected|');
 
