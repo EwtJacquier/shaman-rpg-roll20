@@ -228,7 +228,7 @@
         };
 
         function genAction(char, action, sync = false){
-            let macro = typeof(actions[action]) !== 'undefined' ? actions[action][1].replace('{{','{{[img]('+window.location.href+'img/'+action+'.png) ') : '';
+            let macro = typeof(actions[action]) !== 'undefined' ? actions[action][1].replace('}}','=[img]('+window.location.href+'img/'+action+'.png)}}') : '';
             let cost = typeof(actions[action]) !== 'undefined' ? actions[action][0] : '';
 
             macro = macro.replaceAll('char|','selected|');
@@ -237,7 +237,7 @@
         }
 
         function genMacro(char, skill_name = '?', all_actions = [] ){
-            let macro = ['&{template:default} {{name='+char+' - '+skill_name+'}} {{[img]('+window.location.href+'img/alcance.png) Seu alcance é de [[@{selected|tal}]] casa(s)}}'];
+            let macro = ['&{template:default} {{name='+char+' - '+skill_name+'}}'];
             let cost = 0;
 
             if (all_actions.length > 0){
