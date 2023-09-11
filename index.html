@@ -91,7 +91,6 @@
                         <label>Caminho dos Primitivos</label>
                     </div>
                 </div>
-                <!--
                 <div class="skill-box d-flex d-nowrap">
                     <div class="skill-options elemento">
                         <label>Caminho dos Elementos</label>
@@ -107,6 +106,17 @@
                         <label>Caminho do Sacerdote</label>
                     </div>
                 </div>
+                <div class="skill-box d-flex d-nowrap">
+                    <div class="skill-options proibido">
+                        <label>Caminho das Artes Proibidas</label>
+                    </div>
+                </div>
+                <div class="skill-box d-flex d-nowrap">
+                    <div class="skill-options divindade">
+                        <label>Caminho da Divindade</label>
+                    </div>
+                </div>
+                                <!--
                 <div class="skill-box">
                     <div class="skill-options xama_1">
                         <label>Xamã Nv.1</label>
@@ -136,54 +146,14 @@
     </div>
 
     <script>
-        let skill_replacer = '';
-        let arma_espiritual = false;
-        
-        let osp_multiplier = 1;
-        
-        const osp = '(@{char|osp_ataque} + @{char|osp_defesa} + @{char|osp_elemental})';
-        const attack_osp = '@{char|osp_ataque}';
-        const elem_osp = '@{char|osp_elemental}';
-
-        const modified_actions = {
-            especial_ataque: [']]','+2]]'],
-            especial_movimentar: [']]','+2]]'],
-            especial_curativo: [']]','+2]]'],
-            especial_curar: [']]','+2]]'],
-            especial_impulso: ['o}]]','o}+2]]'],
-            especial_impacto: [']]=','+2]]='],
-            especial_puxar: [']]=','+2]]='],
-            especial_restauracao: [']]=','+2]]='],
-            explodir_ataque: [']]','+1]]'],
-            explodir_impacto: [']]=','+1]]='],
-            explodir_puxar: [']]=','+1]]='],
-            voar_movimentar: [']]','+2]]'],
-            voar_impulso: [']],','+2]],'],
-            invocar_ataque: ['@{char|ataque}+@{char|bonus_ataque}','3'],
-            invocar_empurrar: ['+@{char|bonus_empurrar}',''],
-            invocar_movimentar: ['+@{char|bonus_movimento}',''],
-            invocar_curativo: ['+@{char|bonus_cura}',''],
-            invocar_curar: ['+@{char|bonus_cura}',''],
-            invocar_impacto: ['+@{char|bonus_empurrar}','','@{char|ataque}+@{char|bonus_ataque}','3'],
-            invocar_impulso: ['+@{char|bonus_movimento}','','+@{char|bonus_empurrar}',''],
-            invocar_puxar: ['+@{char|bonus_puxar}','','@{char|ataque}+@{char|bonus_ataque}','3'],
-            superior_ataque: ['@{char|ataque}+@{char|bonus_ataque}','5'],
-            superior_empurrar: ['+@{char|bonus_empurrar}',''],
-            superior_movimentar: ['+@{char|bonus_movimento}',''],
-            superior_curativo: ['+@{char|bonus_cura}','+2'],
-            superior_curar: ['+@{char|bonus_cura}','+2'],
-            superior_meditar: ['3','(3+2)'],
-            superior_impacto: ['+@{char|bonus_empurrar}','','@{char|ataque}+@{char|bonus_ataque}','4'],
-            superior_impulso: ['+@{char|bonus_movimento}','','+@{char|bonus_empurrar}',''],
-            superior_puxar: ['+@{char|bonus_puxar}','','@{char|ataque}+@{char|bonus_ataque}','4'],
-        };
-
-        const elements = {
-        };
-
         const classes = {
-            medium: ['movimentar', 'ataque', 'defesa', 'curar', 'dadoataque', 'dadodefesa', 'dadocurar', 'recuperar', 'empurrar', 'puxar', 'acrobacia', 'reagir','quebrar'],
-            ancestral: ['fisgar','presa','aguia','touro'],
+            medium: ['movimentar', 'ataque', 'defesa', 'curar', 'dadoataque', 'dadodefesa', 'dadocurar', 'empurrar', 'puxar', 'acrobacia', 'reagir'],
+            ancestral: ['urso','cobra','lobo','aguia','touro','escorpiao','tartaruga'],
+            elemento: ['agua','vento','terra','fogo','gelo','madeira','raio'],
+            materia: ['gravidade','trocar','extender','tempo','magnetismo','portal','retroceder'],
+            sacerdote: ['transferir','energia','converter','recuperar','regenerar','meditar','barreira'],
+            proibido: ['corpo','resistencia','dano','area','proteger','combinar','reintegrar'],
+            divindade: ['liberar','restringir','voar','corrente','expandir','cegar','defletir']
             /*
             elemento: ['fogo','raio','vento'],
             xama_3: ['puxar','voar','arma','transferir','defletir','grandeespirito'],
@@ -194,72 +164,70 @@
         };
 
         const actions = {
-            movimentar: [1, "{{Movimentar [[3 + @{char|mv} + @{char|eq_mv} + @{char|os_mv}]] casas}}"],
-            ataque: [1, "{{Causa [[2 + @{char|at} + @{char|eq_at} + @{char|os_at}]] de dano}}"],
-            dadoataque: [1, "{{Causa [[@{char|da}]] de dano}}"],
-            defesa: [1, "{{Concede [[1 + @{selected|df} + @{selected|eq_df} + @{selected|os_df}]] de armadura.}}"],
-            dadodefesa: [1, "{{Concede [[@{selected|da}]] de armadura.}}"],
-            curar: [1, "{{Cura [[2 + (@{char|vd} + @{char|eq_vd} + @{char|os_vd})]] pontos de vida}}"],
-            dadocurar: [1, "{{Cura [[@{char|da}]] pontos de vida}}"],
-            recuperar: [1, "{{Recupera [[1]] ponto de debuff}}"],
-            empurrar: [1, "{{Empurra em [[4]] casas}}"],
-            puxar: [1, "{{Puxa em [[4]] casas}}"],
-            reagir: [2, "{{Executando uma reação}}"],
-            quebrar: [2, "{{Diminui a duração OverSoul do alvo em [[1]]}}"],
-            acrobacia: [2, "{{Não permite que usem reações}}"],
-            fisgar: [1, "{{Causa [[@{char|at} + @{char|eq_at} + @{char|os_at}]] de dano, puxa em [[2]] casas}}"],
-            presa: [2, "{{Debuff [[4]] MV por 1 turno.}}"],
-            aguia: [2, "{{Aumenta o alcance em [[(1 + @{selected|al} + @{selected|eq_al} + @{selected|os_al}) * 3]]}}"],
-            touro: [2, "{{Causa [[(2 + @{char|at} + @{char|eq_at} + @{char|os_at}) * 2]] de dano e empurra o alvo em [[6]] casas}}"],
-            meditar: [2, "{{Meditar [[2]]=[img](http://67.205.142.249/shaman/meditar.png)}}"],
-            meditar2x: [2, "{{Meditar [[{3*2,7}kl1]]=[img](http://67.205.142.249/shaman/meditar.png)}}"],
-            cosmico: [1, "{{Cósmico=[img](http://67.205.142.249/shaman/cosmico.png)}}"],
-            desvincular: [1, "{{Desvincular=[img](http://67.205.142.249/shaman/desvincular.png)}}"],
-            area: [2, "{{Em Área [[3]]x =[img](http://67.205.142.249/shaman/area.png)}}"],
-            direcionar: [2, "{{Direcionar [[4]]=[img](http://67.205.142.249/shaman/direcionar.png)}}"],
-            especial: [2, "{{Especial +[[2]]=[img](http://67.205.142.249/shaman/especial.png)}}"],
-            barreira: [2, "{{Barreira [[4]]=[img](http://67.205.142.249/shaman/barreira.png)}}"],
-            incorporar: [3, "{{Incorporar [[60]]%=[img](http://67.205.142.249/shaman/incorporar.png)}}"],
-            invocar: [3, "{{Invocar=[img](http://67.205.142.249/shaman/invocar.png)}}"],
-            explodir: [2, "{{Explodir +[[1]]=[img](http://67.205.142.249/shaman/explodir.png)}}"],
-            expandir: [1, "{{Expandir +[[1]]=[img](http://67.205.142.249/shaman/expandir.png)}}"],
-            impulso: [1, "{{Impulso [[2+@{char|bonus_movimento}]], [[1+@{char|bonus_empurrar}]]=[img](http://67.205.142.249/shaman/impulso.png)}}"],
-            impulso2x: [1, "{{Impulso [[{(2+@{char|bonus_movimento})*2,7}kl1]], [[{(1+@{char|bonus_empurrar})*2,7}kl1]]=[img](http://67.205.142.249/shaman/impulso.png)}}"],
+            movimentar: [1, "{{(Movimentar - Ação)Usado apenas em si mesmo. Movimente [[@{char|tmv}]] casas}}"],
+            ataque: [1, "{{(Atacar - Ação) Causa [[@{char|tat}]] de dano}}"],
+            dadoataque: [1, "{{(Atacar DA - Ação) Causa [[@{char|da}]] de dano}}"],
+            defesa: [1, "{{(Defender - Ação) Usado apenas em si mesmo. Concede [[@{char|tdf}]] de armadura.}}"],
+            dadodefesa: [1, "{{(Defender DA - Ação) Usado apenas em si mesmo.  Concede [[@{selected|da}]] de armadura.}}"],
+            curar: [1, "{{(Curar - Ação) Usado apenas em si mesmo. Cura [[@{char|tvd}]] pontos de vida}}"],
+            dadocurar: [1, "{{(Curar DA - Ação) Usado apenas em si mesmo. Cura [[@{char|da}]] pontos de vida}}"],
+            empurrar: [1, "{{(Empurrar - Ação) Empurra o alvo em [[4]] casas}}"],
+            puxar: [1, "{{(Puxar - Ação) Puxa o alvo em [[4]] casas}}"],
+            reagir: [2, "{{(Reagir - Reação) Ao ser atacado, utilize uma reação.}}"],
+            quebrar: [2, "{{(Quebrar - Ação) Diminui a duração OverSoul do alvo em [[2]]}}"],
+            acrobacia: [2, "{{(Acrobacia - Reação) Não permite que usem reações}}"],
+
+            cobra: [1, "{{(Cobra - Ação) Causa [[@{char|tat}]] de dano, puxa em [[4]] casas}}"],
+            urso: [1, "{{(Urso - Ação) Usado apenas em si mesmo. Recupera [[4 + (@{char|vd} + @{char|eq_vd} + @{char|os_vd})]] pontos de vida}}"],
+            lobo: [2, "{{(Lobo - Buff) Usado apenas em si mesmo. Presas dentro do seu alcance perdem [[2]] MV. Dura 3 turnos.}}"],
+            aguia: [2, "{{(Águia - Ação) Movimenta [[@{char|tmv}]] casas levando um token adjacente com você.}}"],
+            touro: [2, "{{(Touro - Ação) Causa [[(@{char|tat}) * 2]] de dano e empurra o alvo em [[6]] casas}}"],
+            escorpiao: [2, "{{(Escorpião - Ação) Causa [[(@{char|tat}) * 2]] de dano e envenena o alvo. Ele perderá [[4]] PV por 2 turnos}}"],
+            tartaruga: [2, "{{(Tartaruga - Reação) Uma reação que concede [[@{char|tdf}]] de armadura.}}"],
+
+            fogo: [2, "{{(Fogo - Buff) Usado apenas em si mesmo. Alvos dentro do seu alcance perdem [[4]] PV. Dura 3 turnos}}"],
+            gelo: [2, "{{(Gelo - Ação/Debuff) Causa [[(@{char|tat}) * 2]] de dano e congela o alvo. Seu MV será reduzido em [[2]] por 2 turnos}}"],
+            madeira: [2, "{{(Madeira - Reação) Uma reação que impede que você seja puxado ou empurrado.}}"],
+            raio: [2, "{{(Raio - Reação)Uma reação que permite você se movimentar [[4]] casas ao ser atacado.}}"],
+            agua: [1, "{{(Água - Ação) Usado apenas em si mesmo. Diminui um contador de debuff em [[2]] turnos.}}"],
+            vento: [1, "{{(Vento - Ação) Empurra um alvo em [[6]] casas sem restrição de direção. }}"],
+            terra: [1, "{{(Pedra - Ação) Invoca [[2]] paredes de terra dentro do seu alcance. Elas se desfazem em [[1]] turno ou ao serem atacadas.}}"],
+
+            gravidade: [1, "{{(Gravidade - Ação) Escolha entre puxar ou empurrar um alvo em [[4]] casas.}}"],
+            trocar: [1, "{{(Trocar - Ação) Troque de posição com um aliado em seu alcance.}}"],
+            tempo: [2, "{{(Parar - Buff) Usado apenas em si mesmo. Por [[2]] turnos, você não poderá receber nenhum debuff.}}"],
+            magnetismo: [2, "{{(Magnetizar - Buff/Debuff) Magnetiza um alvo ou a si mesmo. Tokens no alcance serão puxados ou repelidos em [[4]] casas por [[4]] turnos (escolha)}}"],
+            extender: [1, "{{(Extender - Ação) Aumenta o efeito de um contador em 2 turnos}}"],
+            portal: [2, "{{(Portal - Ação) Se movimente para qualquer lugar do mapa.}}"],
+            retroceder: [2, "{{(Afastar - Ação) Uma reação que empurra o alvo em [[4]] casas}}"],
+
+            transferir: [1, "{{(Transferir - Ação) Transfere [[@{char|tvd}]] de PV para um aliado}}"],
+            energia: [1, "{{(Conceder - Ação) Concede [[2]] de PO para um aliado}}"],
+            converter: [1, "{{(Converter - Ação) Com OS desativado, converta [[6]] de PV para [[4]] PO }}"],
+            regenerar: [2, "{{(Regenerar - Buff) Recupera [[@{char|tvd}]] PV a cada turno. Dura [[3]] turnos}}"],
+            recuperar: [2, "{{(Recuperar - Ação) Anula [[1]] contador de debuff em qualquer aliado}}"],
+            barreira: [2, "{{(Barreira - Reação) Anula danos em trocad e PO. Cada PO gasto anula 3 pontos de dano}}"],
+            meditar: [2, "{{(Meditar - Buff) Com OS desativado, recupera [[3]] PO por turno. Dura [[3]] turnos}}"],
+
+            corpo: [2, "{{(Esqueleto - Ação) Invoca um aliado com 3 MV, 1 AL, 6 PV e [[@{char|tat}]] AT.)}}"],
+            resistencia: [1, "{{(Carcaça - Ação) Adiciona [[@{char|tvd}]] de PV a um esqueleto. }}"],
+            dano: [1, "{{(Missão - Ação) Adiciona uma ação de ataque ao esqueleto}}"],
+            area: [1, "{{(Sentido - Ação) Aumenta o MV de um esqueleto em [[1]]}}"],
+            proteger: [1, "{{(Consciência - Ação) Adiciona uma ação de proteger ao esqueleto. Quando seu personagem for atacado, o esqueleto receberá o dano, se desejar. Esqueleto precisa estar em seu alcance.}}"],
+            reintegrar: [2, "{{(Reintegrar - Reação) Quando um é derrotado, você ganha uma ação.}}"],
+            combinar: [1, "{{(Combinar - Ação) Transfere as ações de um esqueleto para outro. Pode ser usado com reintegrar.}}"],
+
+            liberar: [2, "{{(Liberar - Buff) Aumenta o ataque base de um alvo em [[2]]. Dura 3 turnos.)}}"],
+            restringir: [2, "{{(Restringir - Debuff) Reduz o ataque base de um alvo em [[2]]. Dura 3 turnos}}"],
+            voar: [2, "{{(Voar - Buff) O custo de alcance para acertarem seu personagem aumenta em [[2]]. Dura 3 turnos.)}}"],
+            corrente: [2, "{{(Corrente - Ação) Causa [[@{char|tat}]] de dano em dois alvos diferentes ao seu alcance.}}"],
+            defletir: [2, "{{(Defletir - Reação) Uma reação que causa um ataque de [[@{char|tat}]]. Você ainda receberá o dano normalmente. }}"],
+            expandir: [2, "{{(Expandir - Buff) Aumenta o alcance base de um alvo em [[3]]. Dura 3 turnos. }}"],
+            cegar: [2, "{{(Cegar - Debuff) Reduz o alcance base de um alvo em [[3]]. Dura 3 turnos. }}"],
             
-            impacto2x: [1, "{{Impacto [[{(1+@{char|bonus_empurrar})*2,7}kl1]], [[{(@{char|ataque}+@{char|bonus_ataque}-2)*2,7}kl1]]=[img](http://67.205.142.249/shaman/impacto.png)}}"],
-            puxar2x: [1, "{{Puxar [[{(2+@{char|bonus_puxar})*2,7}kl1]], [[{(@{char|ataque}+@{char|bonus_ataque}-3)*2,7}kl1]]=[img](http://67.205.142.249/shaman/puxar.png)}}"],
-            transferir: [2, "{{Transferir [[floor( @{char|vigor} / 2 )]]=[img](http://67.205.142.249/shaman/transferir.png)}}"],
-            grandeespirito: [2, "{{Grande Espírito=[img](http://67.205.142.249/shaman/grandeespirito.png)}}"],
-            defletir: [3, "{{Defletir [[@{char|poder_xamanico}-4]]=[img](http://67.205.142.249/shaman/defletir.png)}}"],
-            restauracao: [2, "{{Restauração [[@{char|poder_xamanico}+@{char|bonus_cura} -5]]=[img](http://67.205.142.249/shaman/restauracao.png)}}"],
-            restauracao2x: [2, "{{Restauração [[{( @{char|poder_xamanico}+@{char|bonus_cura} -5 )*2,7}kl1]]=[img](http://67.205.142.249/shaman/restauracao.png)}}"],
-            punicao: [2, "{{Punição [["+osp+"]]=[img](http://67.205.142.249/shaman/punicao.png)}}"],
-            exorcizar: [3, "{{Exorcizar [[floor( @{char|poder_xamanico} / 2)]]=[img](http://67.205.142.249/shaman/exorcizar.png)}}"],
-            aprisionar: [3, "{{Aprisionar=[img](http://67.205.142.249/shaman/aprisionar.png)}}"],
-            voar: [1, "{{Flutuar +[[2]]=[img](http://67.205.142.249/shaman/voar.png)}}"],
-            arma: [1, "{{Arma Esp.=[img](http://67.205.142.249/shaman/arma.png)}}"],
-            superior: [3, "{{Superior=[img](http://67.205.142.249/shaman/superior.png)}}"],
-            reintegrar: [2, "{{Reintegrar [[floor( (@{char|poder_xamanico} / 4)]]=[img](http://67.205.142.249/shaman/reintegrar.png)}}"],
-            converter: [2, "{{Converter [["+osp+" + 2]]=[img](http://67.205.142.249/shaman/converter.png)}}"],
-            fogo: [2,"{{Fogo [[(4 + @{char|at} + @{char|eq_at} + @{char|os_at}) * 2]]}}"],
-            gelo: [1,"Gelo"],
-            gelo2x: [1,"Gelo"],
-            agua: [1,"Água"],
-            agua2x: [1,"Água"],
-            madeira: [1,"Madeira"],
-            madeira2x: [1,"Madeira"],
-            metal: [1,"Metal"],
-            metal2x: [1,"Metal"],
-            terra: [1,"Terra"],
-            terra2x: [1,"Terra"],
-            vento: [1,"{{Empurrar / Puxar [[6]]}}"],
-            raio: [1,"{{Trovão [[4 + @{char|mv} + @{char|eq_mv} + @{char|os_mv}]]}}"],
         };
 
         function genAction(char, action, sync = false){
-            let element_key = '';
-            let replace = '';
-
             let macro = typeof(actions[action]) !== 'undefined' ? actions[action][1].replace('{{','{{[img]('+window.location.href+'img/'+action+'.png) ') : '';
             let cost = typeof(actions[action]) !== 'undefined' ? actions[action][0] : '';
 
@@ -269,7 +237,7 @@
         }
 
         function genMacro(char, skill_name = '?', all_actions = [] ){
-            let macro = ['&{template:default} {{name='+char+' - '+skill_name+'}} {{[img]('+window.location.href+'img/alcance.png) Seu alcance é de [[1 + @{selected|al} + @{selected|eq_al} + @{selected|os_al}]] casa(s)}}'];
+            let macro = ['&{template:default} {{name='+char+' - '+skill_name+'}} {{[img]('+window.location.href+'img/alcance.png) Seu alcance é de [[@{selected|tal}]] casa(s)}}'];
             let cost = 0;
 
             if (all_actions.length > 0){
@@ -311,8 +279,8 @@
             switch (macro[1]){
                 case 2: custo_real = 2; break;
                 case 4: custo_real = 4; break;
-                case 5: custo_real = 6; break;
-                case 6: custo_real = 10; break;
+                case 5: custo_real = 8; break;
+                case 6: custo_real = 12; break;
                 default: custo_real = '?';
             }
 
