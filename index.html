@@ -164,71 +164,71 @@
         };
 
         const actions = {
-            movimentar: [1, "{{(Movimentar - Ação)Usado apenas em si mesmo. Movimente [[@{char|tmv}]] casas}}"],
-            ataque: [1, "{{(Atacar - Ação) Causa [[@{char|tat}]] de dano}}"],
-            dadoataque: [1, "{{(Atacar DA - Ação) Causa [[@{char|da}]] de dano}}"],
-            defesa: [1, "{{(Defender - Ação) Usado apenas em si mesmo. Concede [[@{char|tdf}]] de armadura.}}"],
-            dadodefesa: [1, "{{(Defender DA - Ação) Usado apenas em si mesmo.  Concede [[@{selected|da}]] de armadura.}}"],
-            curar: [1, "{{(Curar - Ação) Usado apenas em si mesmo. Cura [[@{char|tvd}]] pontos de vida}}"],
-            dadocurar: [1, "{{(Curar DA - Ação) Usado apenas em si mesmo. Cura [[@{char|da}]] pontos de vida}}"],
-            empurrar: [1, "{{(Empurrar - Ação) Empurra o alvo em [[4]] casas}}"],
-            puxar: [1, "{{(Puxar - Ação) Puxa o alvo em [[4]] casas}}"],
-            reagir: [2, "{{(Reagir - Reação) Ao ser atacado, utilize uma reação.}}"],
-            quebrar: [2, "{{(Quebrar - Ação) Diminui a duração OverSoul do alvo em [[2]]}}"],
-            acrobacia: [2, "{{(Acrobacia - Reação) Não permite que usem reações}}"],
+            movimentar: 1,
+            ataque: 1,
+            dadoataque: 1,
+            defesa: 1,
+            dadodefesa: 1,
+            curar: 1,
+            dadocurar: 1,
+            empurrar: 1,
+            puxar: 1,
+            reagir: 2,
+            quebrar: 2,
+            acrobacia: 2,
 
-            cobra: [1, "{{(Cobra - Ação) Causa [[@{char|tat}]] de dano, puxa em [[4]] casas}}"],
-            urso: [1, "{{(Urso - Ação) Usado apenas em si mesmo. Recupera [[4 + (@{char|vd} + @{char|eq_vd} + @{char|os_vd})]] pontos de vida}}"],
-            lobo: [2, "{{(Lobo - Buff) Usado apenas em si mesmo. Presas dentro do seu alcance perdem [[2]] MV. Dura 3 turnos.}}"],
-            aguia: [2, "{{(Águia - Ação) Movimenta [[@{char|tmv}]] casas levando um token adjacente com você.}}"],
-            touro: [2, "{{(Touro - Ação) Causa [[(@{char|tat}) * 2]] de dano e empurra o alvo em [[6]] casas}}"],
-            escorpiao: [2, "{{(Escorpião - Ação) Causa [[(@{char|tat}) * 2]] de dano e envenena o alvo. Ele perderá [[4]] PV por 2 turnos}}"],
-            tartaruga: [2, "{{(Tartaruga - Reação) Uma reação que concede [[@{char|tdf}]] de armadura.}}"],
+            cobra: 1,
+            urso: 1,
+            lobo: 2,
+            aguia: 2,
+            touro: 2,
+            escorpiao: 2,
+            tartaruga: 2,
 
-            fogo: [2, "{{(Fogo - Buff) Usado apenas em si mesmo. Alvos dentro do seu alcance perdem [[4]] PV. Dura 3 turnos}}"],
-            gelo: [2, "{{(Gelo - Ação/Debuff) Causa [[(@{char|tat}) * 2]] de dano e congela o alvo. Seu MV será reduzido em [[2]] por 2 turnos}}"],
-            madeira: [2, "{{(Madeira - Reação) Uma reação que impede que você seja puxado ou empurrado.}}"],
-            raio: [2, "{{(Raio - Reação)Uma reação que permite você se movimentar [[4]] casas ao ser atacado.}}"],
-            agua: [1, "{{(Água - Ação) Usado apenas em si mesmo. Diminui um contador de debuff em [[2]] turnos.}}"],
-            vento: [1, "{{(Vento - Ação) Empurra um alvo em [[6]] casas sem restrição de direção. }}"],
-            terra: [1, "{{(Pedra - Ação) Invoca [[2]] paredes de terra dentro do seu alcance. Elas se desfazem em [[1]] turno ou ao serem atacadas.}}"],
+            fogo: 2,
+            gelo: 2,
+            madeira: 2,
+            raio: 2,
+            agua: 1,
+            vento: 1,
+            terra: 1,
 
-            gravidade: [1, "{{(Gravidade - Ação) Escolha entre puxar ou empurrar um alvo em [[4]] casas.}}"],
-            trocar: [1, "{{(Trocar - Ação) Troque de posição com um aliado em seu alcance.}}"],
-            tempo: [2, "{{(Parar - Buff) Usado apenas em si mesmo. Por [[2]] turnos, você não poderá receber nenhum debuff.}}"],
-            magnetismo: [2, "{{(Magnetizar - Buff/Debuff) Magnetiza um alvo ou a si mesmo. Tokens no alcance serão puxados ou repelidos em [[4]] casas por [[4]] turnos (escolha)}}"],
-            extender: [1, "{{(Extender - Ação) Aumenta o efeito de um contador em 2 turnos}}"],
-            portal: [2, "{{(Portal - Ação) Se movimente para qualquer lugar do mapa.}}"],
-            retroceder: [2, "{{(Afastar - Ação) Uma reação que empurra o alvo em [[4]] casas}}"],
+            gravidade: 1,
+            trocar: 1,
+            tempo: 2,
+            magnetismo: 2,
+            extender: 1,
+            portal: 2,
+            retroceder: 2,
 
-            transferir: [1, "{{(Transferir - Ação) Transfere [[@{char|tvd}]] de PV para um aliado}}"],
-            energia: [1, "{{(Conceder - Ação) Concede [[2]] de PO para um aliado}}"],
-            converter: [1, "{{(Converter - Ação) Com OS desativado, converta [[6]] de PV para [[4]] PO }}"],
-            regenerar: [2, "{{(Regenerar - Buff) Recupera [[@{char|tvd}]] PV a cada turno. Dura [[3]] turnos}}"],
-            recuperar: [2, "{{(Recuperar - Ação) Anula [[1]] contador de debuff em qualquer aliado}}"],
-            barreira: [2, "{{(Barreira - Reação) Anula danos em trocad e PO. Cada PO gasto anula 3 pontos de dano}}"],
-            meditar: [2, "{{(Meditar - Buff) Com OS desativado, recupera [[3]] PO por turno. Dura [[3]] turnos}}"],
+            transferir: 1,
+            energia: 1,
+            converter: 1,
+            regenerar: 2,
+            recuperar: 2,
+            barreira: 2,
+            meditar: 2,
 
-            corpo: [2, "{{(Esqueleto - Ação) Invoca um aliado com 3 MV, 1 AL, 6 PV e [[@{char|tat}]] AT.)}}"],
-            resistencia: [1, "{{(Carcaça - Ação) Adiciona [[@{char|tvd}]] de PV a um esqueleto. }}"],
-            dano: [1, "{{(Missão - Ação) Adiciona uma ação de ataque ao esqueleto}}"],
-            area: [1, "{{(Sentido - Ação) Aumenta o MV de um esqueleto em [[1]]}}"],
-            proteger: [1, "{{(Consciência - Ação) Adiciona uma ação de proteger ao esqueleto. Quando seu personagem for atacado, o esqueleto receberá o dano, se desejar. Esqueleto precisa estar em seu alcance.}}"],
-            reintegrar: [2, "{{(Reintegrar - Reação) Quando um é derrotado, você ganha uma ação.}}"],
-            combinar: [1, "{{(Combinar - Ação) Transfere as ações de um esqueleto para outro. Pode ser usado com reintegrar.}}"],
+            corpo: 2,
+            resistencia: 1,
+            dano: 1,
+            area: 1,
+            proteger: 1,
+            reintegrar: 2,
+            combinar: 1,
 
-            liberar: [2, "{{(Liberar - Buff) Aumenta o ataque base de um alvo em [[2]]. Dura 3 turnos.)}}"],
-            restringir: [2, "{{(Restringir - Debuff) Reduz o ataque base de um alvo em [[2]]. Dura 3 turnos}}"],
-            voar: [2, "{{(Voar - Buff) O custo de alcance para acertarem seu personagem aumenta em [[2]]. Dura 3 turnos.)}}"],
-            corrente: [2, "{{(Corrente - Ação) Causa [[@{char|tat}]] de dano em dois alvos diferentes ao seu alcance.}}"],
-            defletir: [2, "{{(Defletir - Reação) Uma reação que causa um ataque de [[@{char|tat}]]. Você ainda receberá o dano normalmente. }}"],
-            expandir: [2, "{{(Expandir - Buff) Aumenta o alcance base de um alvo em [[3]]. Dura 3 turnos. }}"],
-            cegar: [2, "{{(Cegar - Debuff) Reduz o alcance base de um alvo em [[3]]. Dura 3 turnos. }}"],
+            liberar: 2,
+            restringir: 2,
+            voar: 2,
+            corrente: 2,
+            defletir: 2,
+            expandir: 2,
+            cegar: 2,
             
         };
 
-        function genAction(char, action, sync = false){
-            let macro = typeof(actions[action]) !== 'undefined' ? actions[action][1].replace('}}','=[img]('+window.location.href+'img/'+action+'.png)}}') : '';
+        function genAction(index, char, action, sync = false){
+            let macro = typeof(actions[action]) !== 'undefined' ? '{{**'+index+'**[img]('+window.location.href+'img/'+action+'.png)=@{selected|hab_'+action+'}}}' : '';
             let cost = typeof(actions[action]) !== 'undefined' ? actions[action][0] : '';
 
             macro = macro.replaceAll('char|','selected|');
@@ -237,19 +237,23 @@
         }
 
         function genMacro(char, skill_name = '?', all_actions = [] ){
-            let macro = ['&{template:default} {{name='+char+' - '+skill_name+'}}'];
+            let macro = ['&{template:shamanking} {{name='+char+' - '+skill_name+'}}'];
             let cost = 0;
 
             if (all_actions.length > 0){
 
+                let index = 0;
+
                 all_actions.forEach(function(action){
                     const sync = false;
 
-                    let generated = genAction(char, action, sync);
+                    let generated = genAction(index, char, action, sync);
 
                     if (generated[0]){
                         macro.push(generated[0]);
                         cost += generated[1];
+
+                        index++;
                     }
                 });
             }
@@ -309,5 +313,6 @@
             renderSkill();
         });
     </script>
+
 </body>
 </html>
