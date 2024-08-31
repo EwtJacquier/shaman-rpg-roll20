@@ -22,6 +22,7 @@
         .d-flex{display: flex; justify-content: space-between; gap: 20px; flex-wrap: wrap; align-items: start;}
         .d-flex label:not(:only-child){width: calc(100% - 90px);}
         .d-nowrap{flex-wrap: nowrap;}
+        .d-none{display: none;}
         .skill-box{padding: 10px;margin-bottom: 10px;border: solid 1px #ccc;}
         .skill-cost{background: #000; color: #fff; padding: 5px; display: block; width: 70px; text-align: center;}
         .skill-options{display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px;}
@@ -116,9 +117,14 @@
                         <label>Caminho da Divindade</label>
                     </div>
                 </div>
-                <div class="skill-box d-flex d-nowrap d-none">
+                <div class="skill-box d-flex d-nowrap">
                     <div class="skill-options especial">
                         <label>Caminho Especial</label>
+                    </div>
+                </div>
+                <div class="skill-box d-flex d-none">
+                    <div class="skill-options reversal">
+                        <label>Reversão de Maldição</label>
                     </div>
                 </div>
                                 <!--
@@ -159,7 +165,8 @@
             sacerdote: ['cura','aura','banimento','recuperar','regenerar','meditar','barreira'],
             proibido: ['corpo','resistencia','dano','area','proteger','combinar','reintegrar'],
             divindade: ['liberar','restringir','voar','corrente','expandir','cegar','defletir'],
-            especial: ['quebrar','armadura','segundachance','espinhos','aliado','reflexo']
+            especial: ['quebrar','armadura','segundachance','espinhos','aliado','reflexo'],
+            reversal: ['alvo','vinculo','pressa','lentidao','fardo','selamento','maldicao','furia','ultimato','excesso','santidade']
             /*
             elemento: ['fogo','raio','vento'],
             xama_3: ['puxar','voar','arma','transferir','defletir','grandeespirito'],
@@ -237,7 +244,19 @@
             contra: 2,
             espinhos: 2,
             aliado: 2,
-            reflexo: 2
+            reflexo: 2,
+
+            alvo: 2,
+            vinculo: 2,
+            pressa: 2,
+            lentidao: 2,
+            excesso: 2,
+            fardo: 2,
+            santidade: 2,
+            furia: 2,
+            ultimato: 2,
+            selamento: 2,
+            maldicao: 2
         };
 
         function genAction(index, char, action, sync = false){
