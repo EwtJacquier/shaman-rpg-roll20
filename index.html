@@ -127,30 +127,6 @@
                         <label>Reversão de Maldição</label>
                     </div>
                 </div>
-                                <!--
-                <div class="skill-box">
-                    <div class="skill-options xama_1">
-                        <label>Xamã Nv.1</label>
-                    </div>
-                    <div class="skill-options xama_2">
-                        <label>Xamã Nv.2</label>
-                    </div>
-                    <div class="skill-options xama_3">
-                        <label>Xamã Nv.3</label>
-                    </div>
-                </div>
-                <div class="skill-box">
-                    <div class="skill-options sacerdote_1">
-                        <label>Sacerdote Nv.1</label>
-                    </div>
-                    <div class="skill-options sacerdote_2">
-                        <label>Sacerdote Nv.2</label>
-                    </div>
-                    <div class="skill-options sacerdote_3">
-                        <label>Sacerdote Nv.3</label>
-                    </div>
-                </div>
-                -->
             </div>
         </div>
 
@@ -269,7 +245,8 @@
         }
 
         function genMacro(char, skill_name = '?', all_actions = [] ){
-            let macro = ['&{template:shamanking} {{name='+char+' - '+skill_name+'}} {{[img]('+window.location.href+'img/alcance.png)=Seu alcance é de [[@{selected|tal}]] casa(s)}}'];
+            let macroPrefix = gmMode ? '/w gm ' : '';
+            let macro = [macroPrefix + '&{template:shamanking} {{name='+char+' - '+skill_name+'}} {{[img]('+window.location.href+'img/alcance.png)=Seu alcance é de [[@{selected|tal}]] casa(s)}}'];
             let cost = 0;
 
             if (all_actions.length > 0){
@@ -292,8 +269,14 @@
 
             macro = macro.join(' ');
 
-            if (jQuery('.skill-image').val().trim().length > 0){
-                macro += "{{imagem=[img]("+jQuery('.skill-image').val().trim()+")}}";
+            const imgUrl = jQuery('.skill-image').val().trim();
+
+            if (imgUrl.length > 0) {
+                macro += "{{imagem=[img](" + imgUrl + ")}}";
+
+                if (gmMode) {
+                    macro += " {{gm=" + imgUrl + "}}";
+                }
             }
 
             return [macro, cost];
@@ -343,6 +326,35 @@
 
         jQuery('input').on('keyup', function(){
             renderSkill();
+        });
+
+        // =============================
+        // MODO GM - ATIVAR COM 5 CINCO VEZES
+        // =============================
+        let gmMode = false;
+        let gmKeyCount = 0;
+        let gmTimeout = null;
+
+        function toggleGMMode() {
+            gmMode = !gmMode;
+            gmKeyCount = 0;
+            console.log(gmMode ? "🔒 Modo GM ativado!" : "🔓 Modo GM desativado!");
+            alert(gmMode ? "🔒 Modo GM ativado!" : "🔓 Modo GM desativado!");
+        }
+
+        document.addEventListener("keydown", (e) => {
+            if (e.key === "5") {
+                gmKeyCount++;
+
+                clearTimeout(gmTimeout);
+                gmTimeout = setTimeout(() => (gmKeyCount = 0), 1000); // tempo máximo entre cliques (1s)
+
+                if (gmKeyCount >= 5) {
+                    toggleGMMode();
+                }
+            } else {
+                gmKeyCount = 0; // reset se apertar outra tecla
+            }
         });
     </script>
 
