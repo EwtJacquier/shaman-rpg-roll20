@@ -42,7 +42,7 @@
     </style>
 </head>
 <body>
-    <h1>Gerador de Macro v2.0 - Shaman King RPG</h1>
+    <h1>Gerador de Macro v2.1 - Shaman King RPG</h1>
     <div class="skill">
         <div class="skill-container">
             <div class="skill-col">
@@ -272,10 +272,12 @@
             const imgUrl = jQuery('.skill-image').val().trim();
 
             if (imgUrl.length > 0) {
-                macro += "{{imagem=[img](" + imgUrl + ")}}";
+                const imgMacro = "{{imagem=[img](" + imgUrl + ")}}";
+
+                macro += imgMacro;
 
                 if (gmMode) {
-                    macro += " {{gm=" + imgUrl + "}}";
+                    macro += "\n&{template:shamanking} {{name='+char+' - '+skill_name+'}} " . imgMacro;
                 }
             }
 
