@@ -276,7 +276,7 @@
 
                 macro += imgMacro;
 
-                if (gmMode) {
+                if (gmMode && skill_name) {
                     macro += '\n&{template:shamanking} {{name='+char+' - '+skill_name+'}} ' . imgMacro;
                 }
             }
